@@ -13,6 +13,53 @@ Our previous projects:
 - https://github.com/Santosh-Gupta/Research2Vec
 - https://github.com/Santosh-Gupta/Lit2Vec
 
+I update this Readme with questions and problems I run into through the project. If you have any insight to these, please give feedback through opening a new issue. 
+
+## Update 11-1-19
+
+Not much of an update this week. At the moment, I'm trying to figure out what are the best practices for the HuggingFace Transformers library, specifically for training similarity on passages of text. More details in this issue
+https://github.com/huggingface/transformers/issues/1700
+
+## Update 10-25-19 
+
+I am currently processing the final dataset for training, which will take a while to complete. In the meanwhile, I am trying to figure out how to most optimally use the Hugingface transformers with the newly updated Pytorch XLA library for TPU training. Details here
+
+https://github.com/pytorch/xla/issues/1217
+https://github.com/huggingface/transformers/issues/1540#issuecomment-543406725
+
+Also, in DocProduct, a Relu was used as the final non-linearity for creating the embeddings. Although DocProduct ebmedddings had great retrieval properties, I am not sure if it's the best non-linearity for creating embeddings which will then be used in cos similarity. More details here. 
+
+https://www.reddit.com/r/LanguageTechnology/comments/dn3zam/thought_experiment_is_relu_the_best_activation/?
+
+
+
+## Update 10-21-19 
+
+This project will just a extractive summarizer which I have recently finished training. Details on the training data and model released can be found here
+https://github.com/Santosh-Gupta/ScientificSummarizationDataSets
+
+
+Currently, I am analyzing the input length distributions of the data to see the batching and padding should be handled. I asked a question on the HuggingFace Transforers repo for insights on this consideration
+https://github.com/huggingface/transformers/issues/1581
+
+## Update 10-20-19
+
+I haven't been updating this page too, much, but I will be now, to keep track of the considerations and things I learn a long the way. 
+
+Current Considerations:
+
+I am sampling data with different distributions of input lengths. Since inputs need to be padded to the maximum length in the batch, I am wondering if I should seperate these batches while inputting them into the Bert model. This is fully described in this question I asked
+https://github.com/huggingface/transformers/issues/1581
+
+I would like to use Pytorcher's DataSet and DataLoader classes, and I am trying to figoure how to handle sampling. Since the training will have negative sampling, I will be retrieving several random samples during training. Since I do not watch the loading of files to be a bottle neck in the training, I would like my pipeline to be this: Random select a file to open, but then go down each sample in that file as training inputs. 
+
+My data is in multiple files, with multiple lines, as described here
+https://discuss.pytorch.org/t/dataloaders-multiple-files-and-multiple-rows-per-column-with-lazy-evaluation/11769
+But the solution presentented is for selected any sample, at random. 
+
+I think for my requirements, I need to define a custom sampler here https://pytorch.org/docs/stable/data.html#torch.utils.data.Sampler
+
+
 ## Update 07-1-19
 
 I am proud to present a summarization dataset for machine learning concepts. 
